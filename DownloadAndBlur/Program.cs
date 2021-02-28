@@ -27,7 +27,7 @@ namespace DownloadAndBlur
                 if (args.Length < 1) throw new Exception("Не ввели адрес файла");
 
                 var uri = new Uri(args[0]);
-                int blur = 10;
+                int blur = 0;
                 if (args.Length >= 2) int.TryParse(args[1], out blur);
 
                 _ = DownloadAndBlur(uri, blur);
@@ -44,7 +44,7 @@ namespace DownloadAndBlur
         static async Task DownloadAndBlur(Uri url, int blur)
         {
             var image = await Download(url);
-            var bluredImage = await BlurAsync(image, blur);
+            var bluredImage =  blur > 0 ? await BlurAsync(image, blur) : image;
             await SaveImage(bluredImage, url.Segments[url.Segments.Length - 1]);
             spin = false;
         }
